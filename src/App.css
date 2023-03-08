@@ -1,0 +1,21 @@
+.App {
+  display: flex;
+  flex-direction: row;
+  text-align: center;
+}
+
+.App .customer-view {
+  width: 380px;
+  height: 600px;
+  padding: 15px;
+  display: flex;
+  flex-direction: column;
+}
+
+.App .agent-view {
+  flex: 1;
+  padding: 15px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+}
