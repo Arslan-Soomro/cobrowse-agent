@@ -1,52 +1,57 @@
-import FakeWindow from './components/FakeWindow'
-import CustomAgentUIExample from './CustomAgentUIExample'
-import './App.css'
+import FakeWindow from "./components/FakeWindow";
+import CustomAgentUIExample from "./CustomAgentUIExample";
+import "./App.css";
+import { useEffect, useState } from "react";
+import ConnectScreen from "./components/ConnectScreen";
 
 function App(props) {
-  function renderCustomerView () {
-    const params = {
-      cobrowseio_demo_id: props.demoId,
-      license: 'quGBhRTXlDPITg',
-      api: props.api,
-      device_name: 'Tour Website'
-    }
-    return null;
-    /*
-    return (
-      <div className='customer-view'>
-        <h2>Your Customer</h2>
-        <FakeWindow>
-          <iframe
-            className='device'
-            title='Device'
-            frameBorder={0}
-            width={'100%'}
-            height={'100%'}
-            src={`https://cobrowseio.github.io/todo-mvc-example/index.html?cobrowseio_demo_id=${params.cobrowseio_demo_id}&device_name=Web%20Trial%20Device&license=${params.license}&api=${params.api}`}
-          />
-        </FakeWindow>
-      </div>
-    )
-    */
-  }
+  const [visitorUuid, setVisitorUuid] = useState("");
+  const [stepNum, setStepNum] = useState(0);
 
-  function renderAgentView () {
+  useEffect(() => {
+    // Load Already used visitor uuid at start using local storage
+    const localStorageKey = "visitor_uuid"
+    if(visitorUuid?.length === 0) {
+      const localVisitorUuid = localStorage.getItem(localStorageKey);
+      if(localVisitorUuid) setVisitorUuid(localVisitorUuid);
+    }
+  }, []);
+
+  useEffect(() => {
+    const localStorageKey = "visitor_uuid"
+    localStorage.setItem(localStorageKey, visitorUuid);
+  }, [visitorUuid]);
+
+  function renderAgentView({ visitorUuid }) {
     return (
-      <div className='agent-view'>
-        <h2>Your Support Agent</h2>
+      <div className="agent-view">
+        <h2>Support Agent</h2>
+        <div className="center">
+          <button className="primary-btn" onClick={() => setStepNum(0)}>
+            Reconnect
+          </button>
+        </div>
         <FakeWindow>
-            <CustomAgentUIExample {...props} />
+          <CustomAgentUIExample {...props} visitorUuid={visitorUuid} />
         </FakeWindow>
       </div>
-    )
+    );
   }
 
   return (
-    <div className='App'>
-      {renderAgentView()}
-      {renderCustomerView()}
+    <div className="App">
+      {stepNum === 0 && (
+        <ConnectScreen
+          onConnect={() => {
+            setStepNum(1);
+          }}
+          visitorUuid={visitorUuid}
+          setVisitorUuid={setVisitorUuid}
+        />
+      )}
+      {stepNum === 1 && renderAgentView({ visitorUuid })}
     </div>
-  )
+  );
 }
 
 export default App;

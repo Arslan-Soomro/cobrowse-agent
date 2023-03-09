@@ -56,9 +56,9 @@ export default function CustomAgentUIExample(props) {
   }
 
   function renderConnectingMessage() {
-    if (!session || session?.state === 'pending') return <div className={'loading'}>Custom connecting to device message...</div>
-    if (session?.state === 'authorizing') return <div className={'loading'}>Custom waiting for user to accept message...</div>
-    if (!(screenInfo?.width)) return <div className={'loading'}>Custom loading loading video stream message...</div>
+    if (!session || session?.state === 'pending') return <div className={'loading'}>connecting to device...</div>
+    if (session?.state === 'authorizing') return <div className={'loading'}>waiting for user to accept message...</div>
+    if (!(screenInfo?.width)) return <div className={'loading'}>loading video stream message...</div>
     return null
   }
 
@@ -115,7 +115,7 @@ export default function CustomAgentUIExample(props) {
           frameBorder={0}
           // src={`${props.api}/connect?filter_cobrowseio_demo_id=${props.demoId}&token=${props.token}&end_action=none&agent_tools=none&device_controls=none&session_details=none&popout=none&messages=none`}
           // src={`https://cobrowse.io/connect?filter_user_email=Arslanjs.dev@gmail.com&token=${props.token}`}
-          src={`https://cobrowse.io/connect?filter_device_name=arslan_mac&token=${props.token}`}
+          src={`https://cobrowse.io/connect?filter_visitor_uuid=${props.visitorUuid}&token=${props.token}`}
         />
         { renderControls() }
       </div>
